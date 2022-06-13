@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Command rebarBender</Text>
+    <Description>Some description for rebarBender</Description>
+    <Assembly>rebarBender.dll</Assembly>
+    <FullClassName>rebarBender.Command</FullClassName>
+    <ClientId>3cdda2a7-94dd-40c6-839c-ba5da39fc66e</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Application rebarBender</Name>
+    <Assembly>rebarBender.dll</Assembly>
+    <FullClassName>rebarBender.App</FullClassName>
+    <ClientId>ec93037b-f5f5-4f5b-843d-93bb9bdecbe3</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
