@@ -244,16 +244,26 @@ namespace rebarBender
 
             profileLoops.Add(rebarLoop);
 
-            //Getting the region type for the filled region
-            //var regionType = new FilteredElementCollector(doc).OfClass(typeof(FilledRegionType)).FirstElement("S");
-            // find teh type
+
+
+
+            // find solid fill type in our revit list
             FilteredElementCollector fillRegionTypes = new FilteredElementCollector(doc).OfClass(typeof(FilledRegionType));
-            ElementCategoryFilter filter = new ElementCategoryFilter(BuiltInCategory.OST_FilledRegion);
-
-
-            //IList<Element> myPatterns = fillRegionTypes.WherePasses(filter).WhereElementIsNotElementType().ToElements();
-            IList<Element> myPatterns = fillRegionTypes.WherePasses(filter).WhereElementIsElementType().ToElements();
             var patterns = new FilteredElementCollector(doc).OfClass(typeof(FilledRegionType)).FirstElement();
+
+            foreach (Element elem in fillRegionTypes)
+            {
+                if (elem.Name == "Solid Black")
+                {
+                    patterns = elem;
+                }
+            }
+
+
+
+
+            //var patterns = new FilteredElementCollector(doc).OfClass(typeof(FilledRegionType)).FirstElement();
+            
             
 
             //var regionType = new FilteredElementCollector(doc).OfClass(typeof(FilledRegionType)).First(f => f.Name == "Solid Black");
