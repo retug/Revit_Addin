@@ -15,18 +15,31 @@ namespace rebarBender
     [Transaction(TransactionMode.Manual)]
     public class Command : IExternalCommand
     {
+        static Dictionary<int, double> bar_dia = new Dictionary<int, double>(){
+            {3, 0.375},
+            {4, 0.5},
+            {5, 0.625},
+            {6, 0.75},
+            {7, 0.875},
+            {8, 1.0},
+            {9, 1.128},
+            {10, 1.27},
+            {11, 1.41},
+            {14, 1.693},
+            {18, 2.257}
+            };
+
         // A function that returns the minimum bend radius for a bar
         private static double BendRadius(int bar_size)
         {
             double bar_bend = 0;
-            double bar_dia = 0;
             if (bar_size <= 5)
             {
-                bar_bend = bar_size * 4;
+                bar_bend = bar_dia[bar_size] * (double)4;
             }
             else
             {
-                bar_bend = bar_size * 6;
+                bar_bend = bar_dia[bar_size] * (double)6;
             }
             return bar_bend;
         }
@@ -54,19 +67,7 @@ namespace rebarBender
             return y;
         }
         // a dictionary of bar diameters
-        //var bar_dia = new Dictionary<int, double>(){
-        //    {3, 0.375},
-        //    {4, 0.5},
-        //    {5, 0.625},
-        //    {6, 0.75},
-        //    {7, 0.875},
-        //    {8, 1.0},
-        //    {9, 1.128},
-        //    {10, 1.27},
-        //    {11, 1.41},
-        //    {14, 1.693},
-        //    {18, 2.257}
-        //    };
+        
 
 
         // we will be using the vector from point 1 to 2 to determine global rotation
@@ -123,14 +124,13 @@ namespace rebarBender
             // determines the internal angle of the (3) points
             Double angle_int = Math.Acos((L12.Length * L12.Length + L23.Length * L23.Length - L13.Length*L13.Length) / (2 * L12.Length * L23.Length));
 
-
-
-            // for a #8 bar
-            double bar_dia = (double)1/(double)12;
+            //bar size chosen
+            int bar_size_chosen = 4;
+            double bar_dia_chosen = (double)bar_dia[bar_size_chosen]/(double)12;
             // offset based on bar size chosen
 
             //double b = -BendRadius(4)/12 * Math.Tan((angle_int - Math.PI)/2);
-            double value = (double)8 / (double)12;
+            double value = BendRadius(bar_size_chosen) / (double)12;
             double b = -value * Math.Tan((angle_int - Math.PI) / 2);
 
             //XYZ arc1 = CL1.Flip.Evaluate(0.5, false);
@@ -158,18 +158,18 @@ namespace rebarBender
 
             // offset lines L1B and L3b, if we are CCW, we multiply our offset by -1
             double value_2 = 0;
-            double bar_dia_2 = bar_dia;
+            double bar_dia_2 = bar_dia_chosen;
             if (CW_CCW < 0)
-                bar_dia = -1 * bar_dia;
+                bar_dia_chosen = -1 * bar_dia_chosen;
             if (CW_CCW < 0)
                 value_2 = (-1 * value);
             else
                 value_2 = value;
            
 
-            Curve L1b_off = L1b.CreateOffset(bar_dia, vector3);
+            Curve L1b_off = L1b.CreateOffset(bar_dia_chosen, vector3);
             Curve L1b_rev = Line.CreateBound(L1b_off.GetEndPoint(1), L1b_off.GetEndPoint(0));
-            Curve L3b_off = L3b.CreateOffset(-bar_dia, vector3);
+            Curve L3b_off = L3b.CreateOffset(-bar_dia_chosen, vector3);
 
             Line L3b_L3b_off = Line.CreateBound(L3b.GetEndPoint(0), L3b_off.GetEndPoint(0));
             Line L1b_off_fL1b = Line.CreateBound(L1b_off.GetEndPoint(0), L1b.GetEndPoint(0));
@@ -214,7 +214,7 @@ namespace rebarBender
 
             XYZ pt00 = new XYZ(0, 0, 0);
             XYZ pt10 = new XYZ(10, 0, 0);
-            XYZ pt20 = new XYZ(0, bar_dia, 0);
+            XYZ pt20 = new XYZ(0, bar_dia_chosen, 0);
 
             View view = doc.ActiveView;
 
