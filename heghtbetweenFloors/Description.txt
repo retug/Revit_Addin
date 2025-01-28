@@ -1,0 +1,1 @@
+Shows how to find the height of a window relative to a floor.
